@@ -1,0 +1,29 @@
+server:
+  port: 8015
+
+spring:
+  application:
+    name: eureka-gateway
+  cloud:
+    gateway:
+      routes:
+      - id: query_route
+        uri: http://127.0.0.1:8006
+        predicates:
+        - Path=/hello/** #根据访问路径匹配"**"代表匹配多级目录
+      discovery:
+        locator:
+          enabled: true #开启整合eureka路由
+          lowerCaseServiceId: true #服务名通过小写匹配，如果不配置，就得通过大写来匹配，大小写的配置是互斥的，这种方式访问默认是轮询的
+
+eureka:
+  client:
+    serviceUrl: #注册中心地址
+      defaultZone: http://lwj:lwj@122.51.153.21:8001/eureka/,http://lwj:lwj@122.51.153.21:8002/eureka/,http://lwj:lwj@122.51.153.21:8003/eureka/
+    healthcheck:
+      enabled: true
+  instance:
+    lease-renewal-interval-in-seconds: 5 #client发送心跳给server的频率，默认30秒
+    lease-expiration-duration-in-seconds: 5 #server至上一次收到client的心跳之后，等待下一次心跳的超时时间，在这个时间内没有收到下一次心跳则移除这个实例，默认90秒
+    preferIpAddress: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}

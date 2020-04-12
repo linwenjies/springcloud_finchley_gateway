@@ -1,0 +1,16 @@
+spring cloud gateway
+	目标是替换zuul
+	
+	依赖spring boot和spring webflux，基于netty运行
+	
+核心概念：
+	route：网关的基础元素，由id，目标url，断言和过滤器组成，当请求到达网关后，由gateway handler mapping通过断言进行路由匹配
+		当断言为真的时候，匹配到路由
+	predicate：匹配条件
+	filter：过滤器，可以在请求发出前后进行一些业务上的处理
+	
+gateway项目中的依赖不能有web引用，会造成jar引用冲突
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
